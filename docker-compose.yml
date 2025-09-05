@@ -24,7 +24,7 @@ services:
   app:
     build: .
     container_name: demo-app
-    image: eranga21258/new_cicd_integration:latest   
+    image: kubeeranga118/new_cicd_integration:latest   
     ports:
       - "8081:8080"   # host:container
     environment:
