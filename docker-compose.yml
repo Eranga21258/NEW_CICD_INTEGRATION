@@ -1,50 +1,42 @@
-version: '3.8'
+version: '3.9'
+
 services:
-  mysql:
+  db:
     image: mysql:8.0
     container_name: demo-mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 21258era#met
-      MYSQL_DATABASE: cicd
+      MYSQL_DATABASE: demo
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 21258era#met
     ports:
-      - "3307:3306"
+      - "3307:3306"   # host:container
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p21258era#met", "-e", "SELECT 1"]
-      interval: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      interval: 5s
       timeout: 5s
       retries: 10
       start_period: 30s
-    networks:
-      - app-network
+
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: kubeeranga118/new_cicd_integration:latest
+    build: .
     container_name: demo-app
-    depends_on:
-      mysql:
-        condition: service_healthy
+    image: kubeeranga118/springboot-app:latest   
+    ports:
+      - "8081:8080"   # host:container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://172.18.0.2:3306/cicd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 21258era#met
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_DATASOURCE_HIKARI_CONNECTION_TEST_QUERY: SELECT 1
-      SPRING_DATASOURCE_HIKARI_CONNECTION_INIT_SQL: SELECT 1
-      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
-      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 5
-      SERVER_ADDRESS: 0.0.0.0
-      SERVER_PORT: 8080
-    ports:
-      - "8881:8080"
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db_data:
