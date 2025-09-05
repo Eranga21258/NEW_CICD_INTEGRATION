@@ -13,19 +13,19 @@ services:
       - db_data:/var/lib/mysql
 
   app:
-  image: kubeeranga118/new_cicd_integration:latest
-  container_name: demo-app
-  depends_on:
-    - mysql
-  environment:
-    SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cicd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    SPRING_DATASOURCE_USERNAME: root
-    SPRING_DATASOURCE_PASSWORD: 21258era#met
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
-    SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
-    SERVER_ADDRESS: 0.0.0.0
-    SERVER_PORT: 8080
+    image: kubeeranga118/new_cicd_integration:latest
+    container_name: demo-app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cicd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 21258era#met
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 8080
     ports:
       - "8080:8080"
 
