@@ -1,42 +1,33 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  db:
+  mysql:
     image: mysql:8.0
     container_name: demo-mysql
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 21258era#met
       MYSQL_DATABASE: cicd
     ports:
-      - "3306:3306"   # host:container
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p21258era#met"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
 
   app:
     image: kubeeranga118/new_cicd_integration:latest
     container_name: demo-app
-    ports:
-      - "8881:8881"   # host:container
+    depends_on:
+      - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cicd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://demo-mysql:3306/cicd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 21258era#met
-      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
       SERVER_ADDRESS: 0.0.0.0
       SERVER_PORT: 8080
-      SPRING_APPLICATION_NAME: demo
-    depends_on:
-      db:
-        condition: service_healthy
+    ports:
+      - "8080:8080"
 
 volumes:
   db_data:
