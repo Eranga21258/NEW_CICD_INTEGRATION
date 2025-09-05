@@ -39,7 +39,7 @@ class resourceNameController {
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id) {
         Optional<User> existingItemOptional = repository.findById(id);
 
@@ -60,7 +60,7 @@ class resourceNameController {
         }
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody User item) {
         Optional<User> existingItemOptional = repository.findById(id);
         if (existingItemOptional.isPresent()) {
@@ -73,7 +73,7 @@ class resourceNameController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {
             repository.deleteById(id);
