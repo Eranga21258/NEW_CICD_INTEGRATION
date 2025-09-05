@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: 21258era#met
       MYSQL_DATABASE: cicd
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
 
